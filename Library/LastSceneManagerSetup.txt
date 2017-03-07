@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/Sol's Fol's/_Scenes/DailyRewardTest.unity
+  isLoaded: 1
+  isActive: 1
