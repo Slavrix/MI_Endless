@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum ChestState {closed = 0, open };
 
@@ -17,18 +18,18 @@ public class SelectRandomChest : MonoBehaviour {
     [Tooltip ( "offset value for the creation location of generated item" )]
     public Vector3 offsetPos;
 
+    [Tooltip ( "Text object Must be set in inspector" )]
+    public Text rarityDisplayText;
+    
 
-
-    void Start()
+    void OnEnable ()
     {
         sr = GetComponent<SpriteRenderer> ( );
+        chestState = ChestState.closed;
+        sr.sprite = chestClosed;
     }
 
-    //void OnEnable ()
-    //{
-    //    chestState = ChestState.closed;
-    //    sr.sprite = chestClosed;
-    //}
+   
 
 
     void OnMouseDown ( )
@@ -37,23 +38,27 @@ public class SelectRandomChest : MonoBehaviour {
         //change the sprite
         //instantiate item
 
+
         if(this.chestState == ChestState.closed)
         {
             chestState = ChestState.open;
             sr.sprite = chestOpen;
             Debug.Log ( chestState );
             spawnRandomItem ( );
-
+            Invoke ( "CloseChest", 1.15f );
         }
-        else
-        {
-            chestState = ChestState.closed;
-            sr.sprite = chestClosed;
-            Debug.Log ( chestState );
-
-        }
+  
 
     }
+
+    void CloseChest()
+    {
+        chestState = ChestState.closed;
+        sr.sprite = chestClosed;
+        rarityDisplayText.text = "";
+
+    }
+
 
     void spawnRandomItem()
     {
@@ -86,6 +91,13 @@ public class SelectRandomChest : MonoBehaviour {
                 Vector3 pos = transform.position + offsetPos;
                 Instantiate ( rewardItemArray [ i ], pos, transform.rotation );
                 Debug.Log ( "spawning " + rewardItemArray [ i ].name );
+
+                if (rarityDisplayText != null)
+                {
+
+                rarityDisplayText.text = rewardItemArray[i].name + " ; Rarity =" + itemCompScript.rarityWeight + " %";
+
+                }
 
                 break;
                 
